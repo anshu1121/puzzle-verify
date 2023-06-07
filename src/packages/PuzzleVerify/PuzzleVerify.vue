@@ -31,6 +31,7 @@
         ref="tipText"
       >
         {{ isPassing ? '验证成功': '拖动滑块完成验证' }}
+        <div v-if="!isPassing" class="light" />
       </div>
 
       <div v-if="!isPassing" class="progress-bar" :style="progressBarStyle" ref="progressBarRef"></div>
@@ -137,6 +138,7 @@ const dragEnd = (e) => {
     const diff = Math.abs(dragBarInfo.imgX - dragBarInfo.left)
     if (diff < 5) {
       isPassing.value = true
+      console.log(tipText.value.style.property)
     }
   }
   if (dragBarInfo.isMoving && !isPassing.value) {
@@ -296,7 +298,7 @@ const onImgLoad = () => {
     background-color: #F0F4F9;
     text-align: center;
     overflow: hidden;
-
+    transition: background .5s linear;
     .tip-text {
       position: absolute;
       left: 0;
@@ -306,6 +308,15 @@ const onImgLoad = () => {
       height: 100%;
       text-align: center;
       user-select: none;
+      .light {
+        position: absolute;
+        top: 0;
+        left: -30px;
+        width: 30px;
+        height: 100%;
+        background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.8) 50%, transparent 100%);
+        animation: slide 3s linear infinite;
+      }
     }
     .progress-bar {
       position: absolute;
@@ -342,6 +353,14 @@ const onImgLoad = () => {
   }
   .drag-passing {
     background-color: aquamarine;
+  }
+}
+@keyframes slide {
+  from {
+    left: -200px;
+  }
+  to {
+    left: 100%;
   }
 }
 </style>
