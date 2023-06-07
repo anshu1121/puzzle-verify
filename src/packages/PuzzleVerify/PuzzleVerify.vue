@@ -16,19 +16,25 @@
         :class="{goFirst: canvasInfo.isOk, goKeep: canvasInfo.isKeep}"
         class="move-canvas"
       ></canvas>
+      <!-- <div class="passText" :class="{passed: isPassing}">验证成功</div> -->
     </div>
-    <div class="drag-box"
+    <div 
+      class="drag-box"
       @mousemove="dragMove"
       @mouseleave="dragEnd"
-      @mouseup="dragEnd"
     >
-      <div class="tip-text" ref="tipText" :style="tipTextStyle">
-        拖动滑块完成验证
+      <div 
+        class="tip-text"
+        :class="{'tip-passing': isPassing}"
+        :style="tipTextStyle"
+        ref="tipText"
+      >
+        {{ isPassing ? '验证成功': '拖动滑块完成验证' }}
       </div>
 
-      <div class="progress-bar" :style="progressBarStyle" ref="progressBarRef"></div>
+      <div v-if="!isPassing" class="progress-bar" :style="progressBarStyle" ref="progressBarRef"></div>
 
-      <div class="drag-bar" :style="dragBarStyle" ref="dragBarRef" @mousedown="dragStart" @mouseup="dragEnd">
+      <div v-if="!isPassing" class="drag-bar" :style="dragBarStyle" ref="dragBarRef" @mousedown="dragStart" @mouseup="dragEnd">
         拖动
       </div>
     </div>
@@ -110,7 +116,7 @@ const dragBarStyle = computed(() => {
 
 // 拖动事件开始
 const dragStart = (e: { x: number; }) => {
-  console.log(e.x)
+  if (isPassing.value) return
   dragBarInfo.startX = e.x
   dragBarInfo.isMoving = true
   unref(dragBarRef).style.transition = ''
@@ -128,10 +134,12 @@ const dragMove = (e: { x: number; }) => {
 }
 
 // 拖动结束（超出拖动范围、松开鼠标）
-const dragEnd = () => {
+const dragEnd = (e) => {
+  if (e.type === 'mouseup') {
+    const diff = Math.abs(dragBarInfo.imgX - dragBarInfo.left)
+    if (diff < 5) isPassing.value = true
+  }
   dragBarInfo.isMoving = false
-  const diff = Math.abs(dragBarInfo.imgX - dragBarInfo.left)
-  if (diff < 5) isPassing.value = true
   if (!isPassing.value) {
     unref(progressBarRef).style.transition = 'width .5s'
     unref(dragBarRef).style.transition = 'left .5s'
@@ -140,6 +148,7 @@ const dragEnd = () => {
   }
 }
 
+// 重置
 const dragReset = () => {
   dragBarInfo.left = 0
   dragBarInfo.startX = 0
@@ -235,6 +244,21 @@ const onImgLoad = () => {
       top: 0;
       left: 0;
     }
+    .passText {
+      position: absolute;
+      bottom: -30px;
+      left: 0;
+      width: 100%;
+      background-color: aquamarine;
+      color: #FFF;
+      font-size: 14px;
+      text-align: center;
+      line-height: 30px;
+      transition: all .5s;
+    }
+    .passed {
+      bottom: 0;
+    }
   }
 
   .drag-box {
@@ -246,7 +270,7 @@ const onImgLoad = () => {
     border-radius: 40px;
     font-size: 12px;
     color: #000;
-    background-color: #F0F4F9;
+    
     text-align: center;
     overflow: hidden;
 
@@ -258,8 +282,11 @@ const onImgLoad = () => {
       width: 100%;
       height: 100%;
       text-align: center;
+      background-color: #F0F4F9;
     }
-
+    .tip-passing {
+      background-color: aquamarine;
+    }
     .progress-bar {
       position: absolute;
       left: 0;
