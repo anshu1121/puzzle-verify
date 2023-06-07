@@ -2,7 +2,7 @@
   <div class="puzzle-verify" :style="wrapperStyle">
     <!-- <div class="img" style="width: 100%; height: 280px; background-color: cadetblue;"></div> -->
     <div class="img-box">
-      <span class="iconfont refresh" @click="reset()">&#xe619;</span>
+      <span class="iconfont refresh" @click="reset()">&#xe65e;</span>
       <img 
         src="../../assets/images/verificationImg1.jpg" 
         ref="imgRef"
@@ -133,23 +133,24 @@ const dragMove = (e: { x: number; }) => {
 
 // 拖动结束（超出拖动范围、松开鼠标）
 const dragEnd = (e) => {
-  dragBarInfo.isMoving = false
   if (e.type === 'mouseup') {
     const diff = Math.abs(dragBarInfo.imgX - dragBarInfo.left)
     if (diff < 5) {
       isPassing.value = true
     }
   }
-  if (!isPassing.value) {
+  if (dragBarInfo.isMoving && !isPassing.value) {
     unref(progressBarRef).style.transition = 'width .5s'
     unref(dragBarRef).style.transition = 'all .5s'
     unref(moveCanvasRef).style.transition = 'left .5s'
     reset(true)
   }
+  dragBarInfo.isMoving = false
 }
 
 // 重置
 const reset = (flag?: boolean) => {
+  if(!flag) imgRef.value.src = '../../../src/assets/images/verificationImg1.jpg'
   isPassing.value = false
   dragBarInfo.left = 0
   dragBarInfo.startX = 0
@@ -250,6 +251,7 @@ const onImgLoad = () => {
       text-align: center;
       font-weight: bold;
       background: rgba($color: #FFF, $alpha: .4);
+      user-select: none;
     }
     >img {
       width: 100%;
@@ -303,7 +305,7 @@ const onImgLoad = () => {
       width: 100%;
       height: 100%;
       text-align: center;
-      
+      user-select: none;
     }
     .progress-bar {
       position: absolute;
@@ -323,11 +325,12 @@ const onImgLoad = () => {
       line-height: 40px;
       border-radius: 40px;
       background-color: #FFF;
-      color: #ccc;
+      color: #999;
       text-align: center;
       cursor: pointer;
       user-select: none;
       // filter: drop-shadow(0 0 2px blue);
+      transition: background .3s linear;
       &:hover {
         // filter: drop-shadow(0 0 5px blue);
         background: paleturquoise
