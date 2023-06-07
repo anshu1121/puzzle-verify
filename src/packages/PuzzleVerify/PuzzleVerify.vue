@@ -2,6 +2,10 @@
   <div class="puzzle-verify" :style="wrapperStyle">
     <!-- <div class="img" style="width: 100%; height: 280px; background-color: cadetblue;"></div> -->
     <div class="img-box">
+      <div v-if="maskShow" class="iconfont mask">
+        <div class="rotate">&#xe602;</div>
+        <span>加载中</span>
+      </div>
       <span class="iconfont refresh" @click="reset()">&#xe65e;</span>
       <img 
         src="../../assets/images/verificationImg1.jpg" 
@@ -33,12 +37,12 @@
         {{ isPassing ? '验证成功': '拖动滑块完成验证' }}
         <div v-if="!isPassing" class="light" />
       </div>
-
-      <div v-if="!isPassing" class="progress-bar" :style="progressBarStyle" ref="progressBarRef"></div>
-
-      <div v-if="!isPassing" class="drag-bar" :style="dragBarStyle" ref="dragBarRef" @mousedown="dragStart" @mouseup="dragEnd">
-        <span class="iconfont arrow">&#xe618;</span>
-      </div>
+      <template v-if="!isPassing">
+        <div class="progress-bar" :style="progressBarStyle" ref="progressBarRef"></div>
+        <div class="drag-bar" :style="dragBarStyle" ref="dragBarRef" @mousedown="dragStart" @mouseup="dragEnd">
+          <span class="iconfont arrow">&#xe618;</span>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -60,6 +64,8 @@ const props = defineProps({
     default: 50
   }
 })
+
+const maskShow = ref(false)
 
 // wrapper样式
 const wrapperStyle = computed(() => {
@@ -152,7 +158,13 @@ const dragEnd = (e) => {
 
 // 重置
 const reset = (flag?: boolean) => {
-  if(!flag) imgRef.value.src = '../../../src/assets/images/verificationImg1.jpg'
+  if(!flag) {
+    maskShow.value = true
+    setTimeout(() => {
+      imgRef.value.src = '../../../src/assets/images/verificationImg1.jpg'
+      maskShow.value = false
+    }, 1000);
+  }
   isPassing.value = false
   dragBarInfo.left = 0
   dragBarInfo.startX = 0
@@ -241,6 +253,26 @@ const onImgLoad = () => {
   .img-box {
     position: relative;
     overflow: hidden;
+    .mask {
+      position: absolute;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      color: #000;
+      background: rgba($color: #FFF, $alpha: .8);
+      .rotate {
+        animation: rotate 2s linear infinite;
+      }
+      span {
+        margin-top: 5px;
+        font-size: 14px;
+      }
+    }
+    
     .refresh {
       position: absolute;
       z-index: 4;
@@ -252,7 +284,8 @@ const onImgLoad = () => {
       cursor: pointer;
       text-align: center;
       font-weight: bold;
-      background: rgba($color: #FFF, $alpha: .4);
+      background: rgba($color: #000, $alpha: .3);
+      color: #FFF;
       user-select: none;
     }
     >img {
@@ -280,9 +313,6 @@ const onImgLoad = () => {
       text-align: center;
       line-height: 30px;
       transition: all .5s;
-    }
-    .passed {
-      bottom: 0;
     }
   }
 
@@ -361,6 +391,14 @@ const onImgLoad = () => {
   }
   to {
     left: 100%;
+  }
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 </style>
