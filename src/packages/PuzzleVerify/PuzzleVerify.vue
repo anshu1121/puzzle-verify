@@ -93,7 +93,8 @@ const dragBarRef = ref()
 const dragBarInfo = reactive({
   left: 0,
   startX: 0,
-  isMoving: false
+  isMoving: false,
+  imgX: 0
 })
 
 // 拖动块样式
@@ -108,7 +109,7 @@ const dragBarStyle = computed(() => {
 })
 
 // 拖动事件开始
-const dragStart = (e) => {
+const dragStart = (e: { x: number; }) => {
   console.log(e.x)
   dragBarInfo.startX = e.x
   dragBarInfo.isMoving = true
@@ -118,7 +119,7 @@ const dragStart = (e) => {
 }
 
 // 拖动中
-const dragMove = (e) => {
+const dragMove = (e: { x: number; }) => {
   if (!dragBarInfo.isMoving) return
   const distance = e.x - dragBarInfo.startX
   dragBarInfo.left = distance
@@ -127,8 +128,10 @@ const dragMove = (e) => {
 }
 
 // 拖动结束（超出拖动范围、松开鼠标）
-const dragEnd = (e) => {
+const dragEnd = () => {
   dragBarInfo.isMoving = false
+  const diff = Math.abs(dragBarInfo.imgX - dragBarInfo.left)
+  if (diff < 5) isPassing.value = true
   if (!isPassing.value) {
     unref(progressBarRef).style.transition = 'width .5s'
     unref(dragBarRef).style.transition = 'left .5s'
@@ -156,7 +159,7 @@ const draw = (ctx, x, y, operation) => {
   ctx.arc(x + r - 2, y + l / 2, r + 0.4, 2.76 * PI, 1.24 * PI, true);
   ctx.lineTo(x, y);
   ctx.lineWidth = 0;
-  ctx.fillStyle = "rgba(255, 255, 255, .8)";
+  ctx.fillStyle = "rgba(255, 255, 255, .85)";
   ctx.strokeStyle = "rgba(255, 255, 255, .8)";
   ctx.stroke();
   ctx[operation]();
@@ -172,7 +175,7 @@ const onImgLoad = () => {
   const halfWidth = Math.floor(props.width / 2);
   const refreshHeigth = 25;
   const tipHeight = 20;
-  const x = halfWidth + Math.floor(Math.random() * (halfWidth - barWidth - 15));
+  const x = halfWidth + Math.floor(Math.random() * (halfWidth - barWidth - refreshHeigth));
   let y =
     refreshHeigth +
     Math.floor(
@@ -184,6 +187,8 @@ const onImgLoad = () => {
   const canvasCtx = mainCanvasRef.value.getContext("2d");
   draw(canvasCtx, x, y, "fill");
   canvasInfo.clipBarx = x;
+  dragBarInfo.imgX = x
+  console.log(x)
 
   // 生成图块
   const moveCanvas = moveCanvasRef.value;
@@ -203,7 +208,7 @@ const onImgLoad = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .puzzle-verify {
   width: 360px;
   padding: 5px;
