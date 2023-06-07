@@ -2,6 +2,7 @@
   <div class="puzzle-verify" :style="wrapperStyle">
     <!-- <div class="img" style="width: 100%; height: 280px; background-color: cadetblue;"></div> -->
     <div class="img-box">
+      <span class="iconfont refresh" @click="reset()">&#xe619;</span>
       <img 
         src="../../assets/images/verificationImg1.jpg" 
         ref="imgRef"
@@ -20,12 +21,12 @@
     </div>
     <div 
       class="drag-box"
+      :class="{ 'drag-passing': isPassing }"
       @mousemove="dragMove"
       @mouseleave="dragEnd"
     >
       <div 
         class="tip-text"
-        :class="{'tip-passing': isPassing}"
         :style="tipTextStyle"
         ref="tipText"
       >
@@ -35,7 +36,7 @@
       <div v-if="!isPassing" class="progress-bar" :style="progressBarStyle" ref="progressBarRef"></div>
 
       <div v-if="!isPassing" class="drag-bar" :style="dragBarStyle" ref="dragBarRef" @mousedown="dragStart" @mouseup="dragEnd">
-        拖动
+        <span class="iconfont arrow">&#xe618;</span>
       </div>
     </div>
   </div>
@@ -87,7 +88,7 @@ const progressBarRef = ref()
 const progressBarStyle = computed(() => {
   return {
     height: `${props.dragBarHeight}px`,
-    width: `${props.dragBarWidth - 10 + dragBarInfo.left}px`,
+    // width: `${props.dragBarWidth - 10 + dragBarInfo.left}px`,
     borderRadius: `${props.dragBarHeight}px`,
   }
 })
@@ -119,9 +120,6 @@ const dragStart = (e: { x: number; }) => {
   if (isPassing.value) return
   dragBarInfo.startX = e.x
   dragBarInfo.isMoving = true
-  unref(dragBarRef).style.transition = ''
-  unref(progressBarRef).style.transition = ''
-  unref(moveCanvasRef).style.transition = ''
 }
 
 // 拖动中
@@ -130,30 +128,40 @@ const dragMove = (e: { x: number; }) => {
   const distance = e.x - dragBarInfo.startX
   dragBarInfo.left = distance
   moveCanvasRef.value.style.left = distance + 'px' // 更改canvas位置
-  console.log(dragBarInfo.left)
+  progressBarRef.value.style.width = props.dragBarWidth - 10 + distance + 'px'
 }
 
 // 拖动结束（超出拖动范围、松开鼠标）
 const dragEnd = (e) => {
+  dragBarInfo.isMoving = false
   if (e.type === 'mouseup') {
     const diff = Math.abs(dragBarInfo.imgX - dragBarInfo.left)
-    if (diff < 5) isPassing.value = true
+    if (diff < 5) {
+      isPassing.value = true
+    }
   }
-  dragBarInfo.isMoving = false
   if (!isPassing.value) {
     unref(progressBarRef).style.transition = 'width .5s'
-    unref(dragBarRef).style.transition = 'left .5s'
+    unref(dragBarRef).style.transition = 'all .5s'
     unref(moveCanvasRef).style.transition = 'left .5s'
-    dragReset()
+    reset(true)
   }
 }
 
 // 重置
-const dragReset = () => {
+const reset = (flag?: boolean) => {
+  isPassing.value = false
   dragBarInfo.left = 0
   dragBarInfo.startX = 0
-  moveCanvasRef.value.style.left = 0
+  unref(moveCanvasRef).style.left = 0
+  if (unref(progressBarRef)) unref(progressBarRef).style.width = 0
+  flag && setTimeout(() => {
+    unref(dragBarRef).style.transition = 'background .3s linear'
+    unref(progressBarRef).style.transition = ''
+    unref(moveCanvasRef).style.transition = ''
+  }, 500)
 }
+
 const draw = (ctx, x, y, operation) => {
   var l = props.dragBarWidth;
   var r = 8;
@@ -230,6 +238,19 @@ const onImgLoad = () => {
   .img-box {
     position: relative;
     overflow: hidden;
+    .refresh {
+      position: absolute;
+      z-index: 4;
+      right: 5px;
+      top: 5px;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      cursor: pointer;
+      text-align: center;
+      font-weight: bold;
+      background: rgba($color: #FFF, $alpha: .4);
+    }
     >img {
       width: 100%;
     }
@@ -270,7 +291,7 @@ const onImgLoad = () => {
     border-radius: 40px;
     font-size: 12px;
     color: #000;
-    
+    background-color: #F0F4F9;
     text-align: center;
     overflow: hidden;
 
@@ -282,10 +303,7 @@ const onImgLoad = () => {
       width: 100%;
       height: 100%;
       text-align: center;
-      background-color: #F0F4F9;
-    }
-    .tip-passing {
-      background-color: aquamarine;
+      
     }
     .progress-bar {
       position: absolute;
@@ -305,15 +323,22 @@ const onImgLoad = () => {
       line-height: 40px;
       border-radius: 40px;
       background-color: #FFF;
+      color: #ccc;
       text-align: center;
       cursor: pointer;
       user-select: none;
-      box-shadow: 0 0 5px #CED8FF;
       // filter: drop-shadow(0 0 2px blue);
-      // &:hover {
-      //   filter: drop-shadow(0 0 5px blue);
-      // }
+      &:hover {
+        // filter: drop-shadow(0 0 5px blue);
+        background: paleturquoise
+      }
+      .arrow {
+        font-size: 18px;
+      }
     }
+  }
+  .drag-passing {
+    background-color: aquamarine;
   }
 }
 </style>
