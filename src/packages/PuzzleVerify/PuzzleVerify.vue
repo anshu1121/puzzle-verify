@@ -1,6 +1,5 @@
 <template>
   <div class="puzzle-verify" :style="wrapperStyle">
-    <!-- <div class="img" style="width: 100%; height: 280px; background-color: cadetblue;"></div> -->
     <div v-if="maskShow" class="iconfont mask">
       <div class="rotate">&#xe602;</div>
       <span>加载中</span>
@@ -10,43 +9,45 @@
       <img
         src="../../assets/images/verificationImg1.jpg"
         ref="imgRef"
-        @load="onImgLoad" />
+        @load="onImgLoad"
+      />
       <canvas ref="mainCanvasRef" class="main-canvas"></canvas>
       <canvas
         ref="moveCanvasRef"
         :class="{ goFirst: canvasInfo.isOk, goKeep: canvasInfo.isKeep }"
-        class="move-canvas"></canvas>
+        class="move-canvas"
+      >
+      </canvas>
       <!-- <div class="passText" :class="{passed: isPassing}">验证成功</div> -->
     </div>
     <div
       class="drag-box"
       @mousemove="dragMove"
-      @mouseleave="dragEnd">
+      @mouseleave="dragEnd"
+    >
       <div class="tip-text" :style="tipTextStyle" ref="tipText">
         {{ isPassing ? '' : '拖动滑块完成验证' }}
         <div v-if="!isPassing" class="light" />
       </div>
-      <!-- <template v-if="!isPassing"> -->
-        <div
-          class="progress-bar"
-          :class="{'progress-bar-passed': isPassing}"
-          :style="progressBarStyle"
-          ref="progressBarRef"
-        >
-          {{ isPassing ? '验证成功' : '' }}
-        </div>
-        <div
-          class="drag-bar"
-          :style="dragBarStyle"
-          ref="dragBarRef"
-          @mousedown="dragStart"
-          @mouseup="dragEnd"
-        >
-          <span class="iconfont arrow">
-            {{ isPassing ? '&#xeaf1;' : '&#xe618;' }}  
-          </span>
-        </div>
-      <!-- </template> -->
+      <div
+        class="progress-bar"
+        :class="{'progress-bar-passed': isPassing}"
+        :style="progressBarStyle"
+        ref="progressBarRef"
+      >
+        {{ isPassing ? '验证成功' : '' }}
+      </div>
+      <div
+        class="drag-bar"
+        :style="dragBarStyle"
+        ref="dragBarRef"
+        @mousedown="dragStart"
+        @mouseup="dragEnd"
+      >
+        <span class="iconfont arrow">
+          {{ isPassing ? '&#xeaf1;' : '&#xe618;' }}  
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -255,7 +256,6 @@ const onImgLoad = () => {
   border-radius: 5px;
   border: 1px solid #ccc;
   background-color: #fff;
-  transition: all 2s;
   .mask {
     position: absolute;
     left: 0;

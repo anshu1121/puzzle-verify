@@ -1,15 +1,9 @@
 <template>
   <div class="app">
-    <PuzzleVerify />
+    <PuzzleVerify width="500" />
   </div>
 </template>
 
 <script setup lang="ts">
 import PuzzleVerify from './packages/PuzzleVerify'
 </script>
-
-<style scoped>
-.app {
-
-}
-</style>
