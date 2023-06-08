@@ -25,7 +25,7 @@
       @mousemove="dragMove"
       @mouseleave="dragEnd"
     >
-      <div class="tip-text" :style="tipTextStyle" ref="tipText">
+      <div class="tip-text" :style="tipTextStyle">
         {{ isPassing ? '' : '拖动滑块完成验证' }}
         <div v-if="!isPassing" class="light" />
       </div>
@@ -53,8 +53,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, unref } from "vue";
-
+import { computed, reactive, ref, unref } from 'vue'
+import { draw } from './utils'
 const props = defineProps({
   width: {
     type: Number,
@@ -88,7 +88,6 @@ const canvasInfo = reactive({
 });
 const imgRef = ref();
 
-const tipText = ref();
 const tipTextStyle = computed(() => {
   return {
     lineHeight: `${props.dragBarHeight}px`,
@@ -100,7 +99,6 @@ const progressBarRef = ref();
 const progressBarStyle = computed(() => {
   return {
     height: `${props.dragBarHeight}px`,
-    // width: `${props.dragBarWidth - 10 + dragBarInfo.left}px`,
     borderRadius: `${props.dragBarHeight}px`,
   };
 });
@@ -182,27 +180,6 @@ const reset = (flag?: boolean) => {
     }, 500);
 };
 
-const draw = (ctx, x, y, operation) => {
-  var l = props.dragBarWidth;
-  var r = 8;
-  const PI = Math.PI;
-  ctx.beginPath();
-  ctx.moveTo(x, y);
-  ctx.arc(x + l / 2, y - r + 2, r, 0.72 * PI, 2.26 * PI);
-  ctx.lineTo(x + l, y);
-  ctx.arc(x + l + r - 2, y + l / 2, r, 1.21 * PI, 2.78 * PI);
-  ctx.lineTo(x + l, y + l);
-  ctx.lineTo(x, y + l);
-  ctx.arc(x + r - 2, y + l / 2, r + 0.4, 2.76 * PI, 1.24 * PI, true);
-  ctx.lineTo(x, y);
-  ctx.lineWidth = 0;
-  ctx.fillStyle = "rgba(255, 255, 255, .85)";
-  ctx.strokeStyle = "rgba(255, 255, 255, .8)";
-  ctx.stroke();
-  ctx[operation]();
-  ctx.globalCompositeOperation = "destination-over";
-};
-
 // 图片加载完成
 const onImgLoad = () => {
   // 生成图片缺失位置
@@ -224,7 +201,7 @@ const onImgLoad = () => {
   mainCanvasRef.value.setAttribute("height", imgHeight);
   mainCanvasRef.value.style.display = "block";
   const canvasCtx = mainCanvasRef.value.getContext("2d");
-  draw(canvasCtx, x, y, "fill");
+  draw(props.dragBarWidth, canvasCtx, x, y, "fill");
   canvasInfo.clipBarx = x;
   dragBarInfo.imgX = x;
   console.log(x);
@@ -237,7 +214,7 @@ const onImgLoad = () => {
   const L = barWidth + 8 * 2 + 3; //实际宽度
   const moveCtx = moveCanvas.getContext("2d");
   moveCtx.clearRect(0, 0, imgWidth, imgHeight);
-  draw(moveCtx, x, y, "clip");
+  draw(props.dragBarWidth, moveCtx, x, y, "clip");
   moveCtx.drawImage(imgRef.value, 0, 0, imgWidth, imgHeight);
   y = y - 8 * 2 - 1;
   const ImageData = moveCtx.getImageData(x, y, L, L);
