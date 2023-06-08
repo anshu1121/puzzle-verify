@@ -20,27 +20,33 @@
     </div>
     <div
       class="drag-box"
-      :class="{ 'drag-passing': isPassing }"
       @mousemove="dragMove"
       @mouseleave="dragEnd">
       <div class="tip-text" :style="tipTextStyle" ref="tipText">
-        {{ isPassing ? "验证成功" : "拖动滑块完成验证" }}
+        {{ isPassing ? '' : '拖动滑块完成验证' }}
         <div v-if="!isPassing" class="light" />
       </div>
-      <template v-if="!isPassing">
+      <!-- <template v-if="!isPassing"> -->
         <div
           class="progress-bar"
+          :class="{'progress-bar-passed': isPassing}"
           :style="progressBarStyle"
-          ref="progressBarRef"></div>
+          ref="progressBarRef"
+        >
+          {{ isPassing ? '验证成功' : '' }}
+        </div>
         <div
           class="drag-bar"
           :style="dragBarStyle"
           ref="dragBarRef"
           @mousedown="dragStart"
-          @mouseup="dragEnd">
-          <span class="iconfont arrow">&#xe618;</span>
+          @mouseup="dragEnd"
+        >
+          <span class="iconfont arrow">
+            {{ isPassing ? '&#xeaf1;' : '&#xe618;' }}  
+          </span>
         </div>
-      </template>
+      <!-- </template> -->
     </div>
   </div>
 </template>
@@ -142,7 +148,6 @@ const dragEnd = (e) => {
     const diff = Math.abs(dragBarInfo.imgX - dragBarInfo.left);
     if (diff < 5) {
       isPassing.value = true;
-      console.log(tipText.value.style.property);
     }
   }
   if (dragBarInfo.isMoving && !isPassing.value) {
@@ -311,11 +316,14 @@ const onImgLoad = () => {
       left: 0;
       width: 100%;
       background-color: aquamarine;
-      color: #fff;
+      color: #000;
       font-size: 14px;
       text-align: center;
       line-height: 30px;
       transition: all 0.5s;
+    }
+    .passed {
+      bottom: 0;
     }
   }
 
@@ -361,9 +369,12 @@ const onImgLoad = () => {
       left: 0;
       top: 0;
       z-index: 1;
-      background-color: aqua;
+      background-color: #ccc;
+      color: #FFF;
     }
-
+    .progress-bar-passed {
+      background-color: rgb(118, 198, 29, .8);
+    }
     .drag-bar {
       position: absolute;
       left: 0;
@@ -379,10 +390,10 @@ const onImgLoad = () => {
       cursor: pointer;
       user-select: none;
       // filter: drop-shadow(0 0 2px blue);
+      box-shadow: inset 0 0 10px #ddd;
       transition: background 0.3s linear;
       &:hover {
-        // filter: drop-shadow(0 0 5px blue);
-        background: paleturquoise;
+        
       }
       .arrow {
         font-size: 18px;
