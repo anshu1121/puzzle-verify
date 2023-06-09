@@ -1,11 +1,11 @@
 <template>
-  <div class="puzzle-verify" :class="wrapperClass" :style="wrapperStyle">
-    <div v-if="maskShow" class="iconfont mask">
+  <div class="puzzle-verify" :class="wrapper" :style="wrapperStyle">
+    <div v-if="showMask" class="iconfont mask">
       <div class="rotate">&#xe602;</div>
-      <span>加载中</span>
+      <span>{{ verifyFailed ? '验证失败，请重试': '加载中' }}</span>
     </div>
     <div class="img-box">
-      <span v-if="showRefresh && !isPassing" class="iconfont refresh" @click="refreshImg()">&#xe65e;</span>
+      <span v-if="showRefresh && !isPassed" class="iconfont refresh" @click="refreshImg()">&#xe65e;</span>
       <img
         :src="imgSrc"
         ref="imgRef"
@@ -25,15 +25,15 @@
       @mouseleave="dragEnd"
     >
       <div class="tip-text">
-        {{ isPassing ? '' : tip }}
-        <div v-if="!isPassing" class="light" />
+        {{ isPassed ? '' : tip }}
+        <div v-if="!isPassed" class="light" />
       </div>
       <div
         class="progress-bar"
-        :class="{'progress-bar-passed': isPassing}"
+        :class="{'progress-bar-passed': isPassed, 'progress-bar-fail': verifyFailed }"
         ref="progressBarRef"
       >
-        {{ isPassing ? successTip : '' }}
+        {{ isPassed ? successTip : '' }}
       </div>
       <div
         class="drag-bar"
@@ -43,7 +43,7 @@
         @mouseup="dragEnd"
       >
         <span class="iconfont arrow">
-          {{ isPassing ? '&#xeaf1;' : '&#xe618;' }}  
+          {{ isPassed ? '&#xeaf1;' : '&#xe618;' }}  
         </span>
       </div>
     </div>
@@ -57,7 +57,7 @@ const props = defineProps({
   imgSrc: {
     type: String
   },
-  wrapperClass: {
+  wrapper: {
     type: String
   },
   width: {
@@ -79,12 +79,17 @@ const props = defineProps({
   diffDistance: {
     type: Number,
     default: 5
+  },
+  autoRefresh: {
+    type: Boolean,
+    default: false
   }
 });
 
-const emmits = defineEmits(['success', 'fail', 'refresh', 'update:imgSrc'])
+const emmits = defineEmits(['success', 'fail', 'refresh'])
 
-const maskShow = ref(false);
+const showMask = ref(false)
+const verifyFailed = ref(false)
 
 // wrapper样式
 const wrapperStyle = computed(() => {
@@ -104,7 +109,7 @@ const imgRef = ref();
 
 const progressBarRef = ref();
 
-const isPassing = ref(false);
+const isPassed = ref(false);
 const dragBarRef = ref();
 
 // 拖动块位置信息
@@ -124,7 +129,7 @@ const dragBarStyle = computed(() => {
 
 // 拖动事件开始
 const dragStart = (e: { x: number }) => {
-  if (isPassing.value) return;
+  if (isPassed.value) return;
   dragBarInfo.startX = e.x;
   dragBarInfo.isMoving = true;
 };
@@ -139,17 +144,23 @@ const dragMove = (e: { x: number }) => {
 };
 
 // 拖动结束（超出拖动范围、松开鼠标）
-const dragEnd = (e) => {
+const dragEnd = (e: { type: string; }) => {
   if (e.type === "mouseup") {
     const diff = Math.abs(dragBarInfo.imgX - dragBarInfo.left);
     if (diff < props.diffDistance) {
-      isPassing.value = true;
+      isPassed.value = true;
       emmits('success', { moveDistance: dragBarInfo.left, pointX: dragBarInfo.imgX })
     } else {
+      if (props.autoRefresh) showMask.value = true
+      verifyFailed.value = true
       emmits('fail', { moveDistance: dragBarInfo.left, pointX: dragBarInfo.imgX })
     }
   }
-  if (dragBarInfo.isMoving && !isPassing.value) {
+  if (e.type === "mouseup" && props.autoRefresh) {
+    dragBarInfo.isMoving = false;
+    return
+  }
+  if (dragBarInfo.isMoving && !isPassed.value) {
     unref(progressBarRef).style.transition = "width .5s";
     unref(dragBarRef).style.transition = "all .5s";
     unref(moveCanvasRef).style.transition = "left .5s";
@@ -160,32 +171,30 @@ const dragEnd = (e) => {
 
 // 刷新拼图
 const refreshImg = () => {
-  maskShow.value = true;
+  showMask.value = true;
   emmits('refresh')
-  // setTimeout(() => {
-  //   imgRef.value.src = "../../../src/assets/images/verificationImg1.jpg";
-  //   maskShow.value = false;
-  // }, 1000);
 }
 
 // 重置
 const reset = () => {
-  isPassing.value = false;
+  verifyFailed.value = false
+  isPassed.value = false;
   dragBarInfo.left = 0;
   dragBarInfo.startX = 0;
   unref(moveCanvasRef).style.left = 0;
   if (unref(progressBarRef)) unref(progressBarRef).style.width = 0;
   setTimeout(() => {
-    unref(dragBarRef).style.transition = "background .3s linear";
+    unref(dragBarRef).style.transition = "";
     unref(progressBarRef).style.transition = "";
     unref(moveCanvasRef).style.transition = "";
   }, 500);
 };
+defineExpose({ reset })
 
 // 图片加载完成
 const onImgLoad = () => {
-  console.log('load')
-   maskShow.value = false;
+  reset();
+  showMask.value = false;
   // 生成图片缺失位置
   const barWidth = 50;
   const imgHeight = imgRef.value.height;
@@ -357,6 +366,9 @@ const onImgLoad = () => {
     }
     .progress-bar-passed {
       background-color: rgb(118, 198, 29, .8);
+    }
+    .progress-bar-fail {
+      background-color: red
     }
     .drag-bar {
       position: absolute;
