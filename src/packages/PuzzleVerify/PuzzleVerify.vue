@@ -384,12 +384,8 @@ const onImgLoad = () => {
       text-align: center;
       cursor: pointer;
       user-select: none;
-      // filter: drop-shadow(0 0 2px blue);
       box-shadow: inset 0 0 10px #ddd;
       transition: background 0.3s linear;
-      &:hover {
-        
-      }
       .arrow {
         font-size: 18px;
       }
