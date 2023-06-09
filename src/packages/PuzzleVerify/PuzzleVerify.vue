@@ -50,7 +50,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="PuzzleVerify">
 import { computed, reactive, ref, unref } from 'vue'
 import { draw } from './utils'
 const props = defineProps({

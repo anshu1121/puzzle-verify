@@ -1,4 +1,4 @@
-export const draw = (ctx, x: number, y: number, operation: string) => {
+export const draw = (ctx:any, x: number, y: number, operation: string) => {
   var l = 50;
   var r = 8;
   const PI = Math.PI;

@@ -10,24 +10,24 @@ import { ref } from 'vue'
 import PuzzleVerify from './packages/PuzzleVerify'
 const puzzleRef = ref()
 const imgSrc = ref('../src/assets/images/verificationImg1.jpg')
-function onSuccess (params) {
+function onSuccess (params: any) {
   console.log(params)
 }
 
-function onFail (params) {
+function onFail (params: any) {
   console.log(params)
-  // onRefresh()
 }
+
 function reset () {
   puzzleRef.value.reset()
 }
 
 async function onRefresh () {
   const res = await reloadImg()
-  console.log(res)
   imgSrc.value = res
 }
-function reloadImg () {
+
+function reloadImg (): any {
   return new Promise((resolve) => {
     setTimeout(() => {
       const newImgSrc = imgSrc.value === '../src/assets/images/verificationImg1.jpg' ? '../src/assets/images/verificationImg2.jpg' : '../src/assets/images/verificationImg1.jpg'
