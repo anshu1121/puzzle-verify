@@ -1,18 +1,21 @@
-# Vue 3 + TypeScript + Vite
+# 拼图验证插件
+> 支持Vue3
+### props
+| 参数 | 说明 | 类型 | 默认值 |
+|----|---|---|---|
+| imgSrc | 图片链接 | string | - |
+| wrapperClass | 容器类名 | string | - |
+| width | 宽度 | number | 360 |
+| tip | 提示文字 | string | '拖动滑块完成验证' |
+| successTip | 验证成功后的提示文字 | string | '验证成功' |
+| showRefresh | 是否显示刷新按钮 | boolean | true |
+| diffDistance | 允许的误差范围，在此范围内表示验证成功 | number | 5 |
+|  |  |  |  |
+|  |  |  |  |
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Type Support For `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+### callbacks
+| 名称 | 说明 | 参数 |
+|----|---|---|
+| success | 验证成功后的回调函数 | type: object <br />{ moveDistance: '移动距离', pointX: '拼块的横坐标x位置'} |
+| fail | 验证失败后的回调函数 | 同success |
+|  |  |  |

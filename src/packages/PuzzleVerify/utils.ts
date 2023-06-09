@@ -1,5 +1,5 @@
-export const draw = (dragBarWidth: number, ctx, x: number, y: number, operation: string) => {
-  var l = dragBarWidth;
+export const draw = (ctx, x: number, y: number, operation: string) => {
+  var l = 50;
   var r = 8;
   const PI = Math.PI;
   ctx.beginPath();

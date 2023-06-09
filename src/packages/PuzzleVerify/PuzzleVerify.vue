@@ -1,13 +1,13 @@
 <template>
-  <div class="puzzle-verify" :style="wrapperStyle">
+  <div class="puzzle-verify" :class="wrapperClass" :style="wrapperStyle">
     <div v-if="maskShow" class="iconfont mask">
       <div class="rotate">&#xe602;</div>
       <span>加载中</span>
     </div>
     <div class="img-box">
-      <span class="iconfont refresh" @click="reset()">&#xe65e;</span>
+      <span v-if="showRefresh && !isPassing" class="iconfont refresh" @click="refreshImg()">&#xe65e;</span>
       <img
-        src="../../assets/images/verificationImg1.jpg"
+        :src="imgSrc"
         ref="imgRef"
         @load="onImgLoad"
       />
@@ -18,24 +18,22 @@
         class="move-canvas"
       >
       </canvas>
-      <!-- <div class="passText" :class="{passed: isPassing}">验证成功</div> -->
     </div>
     <div
       class="drag-box"
       @mousemove="dragMove"
       @mouseleave="dragEnd"
     >
-      <div class="tip-text" :style="tipTextStyle">
-        {{ isPassing ? '' : '拖动滑块完成验证' }}
+      <div class="tip-text">
+        {{ isPassing ? '' : tip }}
         <div v-if="!isPassing" class="light" />
       </div>
       <div
         class="progress-bar"
         :class="{'progress-bar-passed': isPassing}"
-        :style="progressBarStyle"
         ref="progressBarRef"
       >
-        {{ isPassing ? '验证成功' : '' }}
+        {{ isPassing ? successTip : '' }}
       </div>
       <div
         class="drag-bar"
@@ -56,19 +54,35 @@
 import { computed, reactive, ref, unref } from 'vue'
 import { draw } from './utils'
 const props = defineProps({
+  imgSrc: {
+    type: String
+  },
+  wrapperClass: {
+    type: String
+  },
   width: {
     type: Number,
     default: 360,
   },
-  dragBarHeight: {
-    type: Number,
-    default: 40,
+  tip: {
+    type: String,
+    default: '拖动滑块完成验证'
   },
-  dragBarWidth: {
-    type: Number,
-    default: 50,
+  successTip: {
+    type: String,
+    default: '验证成功'
   },
+  showRefresh: {
+    type: Boolean,
+    default: true
+  },
+  diffDistance: {
+    type: Number,
+    default: 5
+  }
 });
+
+const emmits = defineEmits(['success', 'fail', 'refresh', 'update:imgSrc'])
 
 const maskShow = ref(false);
 
@@ -88,20 +102,7 @@ const canvasInfo = reactive({
 });
 const imgRef = ref();
 
-const tipTextStyle = computed(() => {
-  return {
-    lineHeight: `${props.dragBarHeight}px`,
-  };
-});
-
 const progressBarRef = ref();
-// 进度条样式
-const progressBarStyle = computed(() => {
-  return {
-    height: `${props.dragBarHeight}px`,
-    borderRadius: `${props.dragBarHeight}px`,
-  };
-});
 
 const isPassing = ref(false);
 const dragBarRef = ref();
@@ -117,11 +118,7 @@ const dragBarInfo = reactive({
 // 拖动块样式
 const dragBarStyle = computed(() => {
   return {
-    width: `${props.dragBarWidth}px`,
-    height: `${props.dragBarHeight}px`,
-    left: `${unref(dragBarInfo.left)}px`,
-    lineHeight: `${props.dragBarHeight}px`,
-    borderRadius: `${props.dragBarHeight}px`,
+    left: `${unref(dragBarInfo.left)}px`
   };
 });
 
@@ -138,55 +135,62 @@ const dragMove = (e: { x: number }) => {
   const distance = e.x - dragBarInfo.startX;
   dragBarInfo.left = distance;
   moveCanvasRef.value.style.left = distance + "px"; // 更改canvas位置
-  progressBarRef.value.style.width = props.dragBarWidth - 10 + distance + "px";
+  progressBarRef.value.style.width = 40 + distance + "px";
 };
 
 // 拖动结束（超出拖动范围、松开鼠标）
 const dragEnd = (e) => {
   if (e.type === "mouseup") {
     const diff = Math.abs(dragBarInfo.imgX - dragBarInfo.left);
-    if (diff < 5) {
+    if (diff < props.diffDistance) {
       isPassing.value = true;
+      emmits('success', { moveDistance: dragBarInfo.left, pointX: dragBarInfo.imgX })
+    } else {
+      emmits('fail', { moveDistance: dragBarInfo.left, pointX: dragBarInfo.imgX })
     }
   }
   if (dragBarInfo.isMoving && !isPassing.value) {
     unref(progressBarRef).style.transition = "width .5s";
     unref(dragBarRef).style.transition = "all .5s";
     unref(moveCanvasRef).style.transition = "left .5s";
-    reset(true);
+    reset();
   }
   dragBarInfo.isMoving = false;
 };
 
+// 刷新拼图
+const refreshImg = () => {
+  maskShow.value = true;
+  emmits('refresh')
+  // setTimeout(() => {
+  //   imgRef.value.src = "../../../src/assets/images/verificationImg1.jpg";
+  //   maskShow.value = false;
+  // }, 1000);
+}
+
 // 重置
-const reset = (flag?: boolean) => {
-  if (!flag) {
-    maskShow.value = true;
-    setTimeout(() => {
-      imgRef.value.src = "../../../src/assets/images/verificationImg1.jpg";
-      maskShow.value = false;
-    }, 1000);
-  }
+const reset = () => {
   isPassing.value = false;
   dragBarInfo.left = 0;
   dragBarInfo.startX = 0;
   unref(moveCanvasRef).style.left = 0;
   if (unref(progressBarRef)) unref(progressBarRef).style.width = 0;
-  flag &&
-    setTimeout(() => {
-      unref(dragBarRef).style.transition = "background .3s linear";
-      unref(progressBarRef).style.transition = "";
-      unref(moveCanvasRef).style.transition = "";
-    }, 500);
+  setTimeout(() => {
+    unref(dragBarRef).style.transition = "background .3s linear";
+    unref(progressBarRef).style.transition = "";
+    unref(moveCanvasRef).style.transition = "";
+  }, 500);
 };
 
 // 图片加载完成
 const onImgLoad = () => {
+  console.log('load')
+   maskShow.value = false;
   // 生成图片缺失位置
-  const barWidth = props.dragBarWidth;
+  const barWidth = 50;
   const imgHeight = imgRef.value.height;
   const imgWidth = imgRef.value.width;
-  const halfWidth = Math.floor(props.width / 2);
+  const halfWidth = Math.floor(Number(props.width) / 2);
   const refreshHeigth = 25;
   const tipHeight = 20;
   const x =
@@ -201,10 +205,9 @@ const onImgLoad = () => {
   mainCanvasRef.value.setAttribute("height", imgHeight);
   mainCanvasRef.value.style.display = "block";
   const canvasCtx = mainCanvasRef.value.getContext("2d");
-  draw(props.dragBarWidth, canvasCtx, x, y, "fill");
+  draw(canvasCtx, x, y, "fill");
   canvasInfo.clipBarx = x;
   dragBarInfo.imgX = x;
-  console.log(x);
 
   // 生成图块
   const moveCanvas = moveCanvasRef.value;
@@ -214,7 +217,7 @@ const onImgLoad = () => {
   const L = barWidth + 8 * 2 + 3; //实际宽度
   const moveCtx = moveCanvas.getContext("2d");
   moveCtx.clearRect(0, 0, imgWidth, imgHeight);
-  draw(props.dragBarWidth, moveCtx, x, y, "clip");
+  draw(moveCtx, x, y, "clip");
   moveCtx.drawImage(imgRef.value, 0, 0, imgWidth, imgHeight);
   y = y - 8 * 2 - 1;
   const ImageData = moveCtx.getImageData(x, y, L, L);
@@ -324,6 +327,7 @@ const onImgLoad = () => {
       z-index: 2;
       width: 100%;
       height: 100%;
+      line-height: 40px;
       text-align: center;
       user-select: none;
       .light {
@@ -346,6 +350,8 @@ const onImgLoad = () => {
       left: 0;
       top: 0;
       z-index: 1;
+      height: 40px;
+      border-radius: 40px;
       background-color: #ccc;
       color: #FFF;
     }
