@@ -1,5 +1,5 @@
 # 拼图验证
-> 支持Vue3
+> puzzle for Vue3
 ### props
 | 参数 | 说明 | 类型 | 默认值 |
 |----|---|---|---|
@@ -11,7 +11,6 @@
 | showRefresh | 是否显示刷新按钮 | boolean | true |
 | diffDistance | 允许的误差范围，在此范围内表示验证成功 | number | 5 |
 | autoRefresh | 验证失败后重新加载图片，需要在fail回调时修改新的imgSrc | boolean | false |
-|  |  |  |  |
 
 ### callbacks
 | 名称 | 说明 | 参数 |
