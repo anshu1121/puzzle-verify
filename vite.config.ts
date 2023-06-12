@@ -7,22 +7,22 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'src/packages/index.ts'),
-      name: 'AnTestUI',
-      fileName: 'AnTestUI'
+      entry: path.resolve(__dirname, "src/packages/index.ts"),
+      name: "index",
+      fileName: "index",
     },
     rollupOptions: {
       // 确保外部化处理不想打包进库的依赖
-      external: ['vue'],
+      external: ["vue"],
       output: {
         // 在 UMD 构建模式下为这些外部化的依赖提供一个全局变量
         globals: {
-          vue: 'Vue'
-        }
-      }
-    }
+          vue: "Vue",
+        },
+      },
+    },
   },
   server: {
-    port: 8080
-  }
-})
+    port: 8080,
+  },
+});
