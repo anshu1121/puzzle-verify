@@ -49,8 +49,12 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts" name="PuzzleVerify">
+<script lang="ts">
+export default {
+  name: 'PuzzleVerify'
+}
+</script>
+<script setup lang="ts">
 import { computed, reactive, ref, unref } from 'vue'
 import { draw } from './utils'
 const props = defineProps({
