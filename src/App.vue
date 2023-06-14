@@ -1,13 +1,21 @@
 <template>
   <div class="app">
-    <PuzzleVerify :width="360" @success="onSuccess" @fail="onFail" @refresh="onRefresh" :imgSrc="imgSrc" :autoRefresh="false" ref="puzzleRef"  />
+    <PuzzleVerify
+      :width="360"
+      :imgSrc="imgSrc"
+      :autoRefresh="false"
+      ref="puzzleRef"
+      @success="onSuccess"
+      @fail="onFail"
+      @refresh="onRefresh"
+    />
     <div @click="reset">reset</div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-// import PuzzleVerify from './packages/PuzzleVerify'
+import PuzzleVerify from 'puzzle-verify3.0'
 const puzzleRef = ref()
 const imgSrc = ref('../src/assets/images/verificationImg1.jpg')
 function onSuccess (params: any) {

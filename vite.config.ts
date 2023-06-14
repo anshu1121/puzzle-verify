@@ -8,8 +8,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/packages/index.ts"),
-      name: "index",
-      fileName: "index",
+      name: "puzzle-verify",
+      fileName: (format) => `index.${format}.ts`,
     },
     rollupOptions: {
       // 确保外部化处理不想打包进库的依赖
@@ -23,6 +23,6 @@ export default defineConfig({
     },
   },
   server: {
-    port: 8080,
+    port: 3000,
   },
 });
