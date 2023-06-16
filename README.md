@@ -1,5 +1,15 @@
 # 拼图验证
 > puzzle for Vue3
+## 安装
+```bash
+$ npm install puzzle-verify
+```
+## 使用
+```js
+import PuzzleVerify from 'puzzle-verify'
+import 'puzzle-verify/style.css'
+```
+## 参数
 ### props
 | 参数 | 说明 | 类型 | 默认值 |
 |----|---|---|---|

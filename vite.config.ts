@@ -6,9 +6,9 @@ import path from 'path'
 export default defineConfig({
   plugins: [vue()],
   build: {
-    outDir: 'lib',
+    outDir: path.resolve(__dirname, "src/lib"),
     lib: {
-      entry: path.resolve(__dirname, "src/packages/PuzzleVerify/index.ts"),
+      entry: path.resolve(__dirname, "src/PuzzleVerify/index.ts"),
       name: "puzzle-verify",
       fileName: (format) => `index.${format}.ts`,
     },
