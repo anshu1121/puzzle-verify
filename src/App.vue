@@ -14,16 +14,19 @@
 </template>
 
 <script setup lang="ts">
+import PuzzleVerify from './packages/PuzzleVerify'
 import { ref } from 'vue'
-import PuzzleVerify from 'puzzle-verify3.0'
+
 const puzzleRef = ref()
 const imgSrc = ref('../src/assets/images/verificationImg1.jpg')
+
 function onSuccess (params: any) {
-  console.log(params)
+  console.log('success', params)
 }
 
 function onFail (params: any) {
-  console.log(params)
+  console.log('fail', params)
+  // onRefresh()
 }
 
 function reset () {

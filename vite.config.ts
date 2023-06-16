@@ -8,7 +8,7 @@ export default defineConfig({
   build: {
     outDir: 'lib',
     lib: {
-      entry: path.resolve(__dirname, "src/packages/index.ts"),
+      entry: path.resolve(__dirname, "src/packages/PuzzleVerify/index.ts"),
       name: "puzzle-verify",
       fileName: (format) => `index.${format}.ts`,
     },

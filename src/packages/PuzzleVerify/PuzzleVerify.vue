@@ -14,7 +14,6 @@
       <canvas ref="mainCanvasRef" class="main-canvas"></canvas>
       <canvas
         ref="moveCanvasRef"
-        :class="{ goFirst: canvasInfo.isOk, goKeep: canvasInfo.isKeep }"
         class="move-canvas"
       >
       </canvas>
@@ -96,11 +95,7 @@ const showMask = ref(false)
 const verifyFailed = ref(false)
 
 // wrapper样式
-const wrapperStyle = computed(() => {
-  return {
-    width: `${props.width}px`,
-  };
-});
+const wrapperStyle = computed(() => ({ width: `${props.width}px` }));
 
 const mainCanvasRef = ref();
 const moveCanvasRef = ref();
@@ -125,11 +120,7 @@ const dragBarInfo = reactive({
 });
 
 // 拖动块样式
-const dragBarStyle = computed(() => {
-  return {
-    left: `${unref(dragBarInfo.left)}px`
-  };
-});
+const dragBarStyle = computed(() => ({ left: `${unref(dragBarInfo.left)}px` }));
 
 // 拖动事件开始
 const dragStart = (e: { x: number }) => {
@@ -140,11 +131,12 @@ const dragStart = (e: { x: number }) => {
 
 // 拖动中
 const dragMove = (e: { x: number }) => {
-  if (!dragBarInfo.isMoving) return;
-  const distance = e.x - dragBarInfo.startX;
-  dragBarInfo.left = distance;
-  moveCanvasRef.value.style.left = distance + "px"; // 更改canvas位置
-  progressBarRef.value.style.width = 40 + distance + "px";
+  if (dragBarInfo.isMoving) {
+    const distance = e.x - dragBarInfo.startX;
+    dragBarInfo.left = distance;
+    moveCanvasRef.value.style.left = distance + "px"; // 更改canvas位置
+    progressBarRef.value.style.width = 40 + distance + "px";
+  }
 };
 
 // 拖动结束（超出拖动范围、松开鼠标）
@@ -193,6 +185,7 @@ const reset = () => {
     unref(moveCanvasRef).style.transition = "";
   }, 500);
 };
+
 defineExpose({ reset })
 
 // 图片加载完成
