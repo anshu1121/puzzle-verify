@@ -1,16 +1,16 @@
-import { defineComponent as G, ref as c, computed as P, reactive as A, unref as n, openBlock as M, createElementBlock as R, normalizeClass as N, normalizeStyle as V, createElementVNode as i, toDisplayString as S, createCommentVNode as z, createTextVNode as J, pushScopeId as Q, popScopeId as U } from "vue";
-const h = Math.PI, W = (e, o, s, f) => {
-  e.beginPath(), e.moveTo(o, s), e.arc(o + 50 / 2, s - 8 + 2, 8, 0.72 * h, 2.26 * h), e.lineTo(o + 50, s), e.arc(o + 50 + 8 - 2, s + 50 / 2, 8, 1.21 * h, 2.78 * h), e.lineTo(o + 50, s + 50), e.lineTo(o, s + 50), e.arc(o + 8 - 2, s + 50 / 2, 8 + 0.4, 2.76 * h, 1.24 * h, !0), e.lineTo(o, s), e.lineWidth = 0, e.fillStyle = "rgba(255, 255, 255, .85)", e.strokeStyle = "rgba(255, 255, 255, .8)", e.stroke(), e[f](), e.globalCompositeOperation = "destination-over";
-}, Y = (e) => (Q("data-v-713f0316"), e = e(), U(), e), Z = {
+import { defineComponent as G, ref as u, computed as N, reactive as V, unref as r, openBlock as S, createElementBlock as C, normalizeClass as x, normalizeStyle as W, createElementVNode as l, toDisplayString as I, createCommentVNode as D, createTextVNode as J, pushScopeId as Q, popScopeId as U } from "vue";
+const y = Math.PI, E = (e, n, a, c) => {
+  e.beginPath(), e.moveTo(n, a), e.arc(n + 50 / 2, a - 8 + 2, 8, 0.72 * y, 2.26 * y), e.lineTo(n + 50, a), e.arc(n + 50 + 8 - 2, a + 50 / 2, 8, 1.21 * y, 2.78 * y), e.lineTo(n + 50, a + 50), e.lineTo(n, a + 50), e.arc(n + 8 - 2, a + 50 / 2, 8 + 0.4, 2.76 * y, 1.24 * y, !0), e.lineTo(n, a), e.lineWidth = 0, e.fillStyle = "rgba(255, 255, 255, .85)", e.strokeStyle = "rgba(255, 255, 255, .8)", e.stroke(), e[c](), e.globalCompositeOperation = "destination-over";
+}, Y = (e) => (Q("data-v-f096419f"), e = e(), U(), e), Z = {
   key: 0,
   class: "iconfont mask"
-}, ee = /* @__PURE__ */ Y(() => /* @__PURE__ */ i("div", { class: "rotate" }, "", -1)), te = { class: "img-box" }, se = ["src"], ae = { class: "tip-text" }, oe = {
+}, ee = /* @__PURE__ */ Y(() => /* @__PURE__ */ l("div", { class: "rotate" }, "", -1)), te = { class: "img-box" }, se = ["src"], ae = { class: "tip-text" }, oe = {
   key: 0,
   class: "light"
-}, le = { class: "iconfont arrow" }, ie = {
+}, ne = { class: "iconfont arrow" }, le = {
   name: "PuzzleVerify"
-}, re = /* @__PURE__ */ G({
-  ...ie,
+}, ie = /* @__PURE__ */ G({
+  ...le,
   props: {
     imgSrc: {
       type: String
@@ -44,118 +44,124 @@ const h = Math.PI, W = (e, o, s, f) => {
     }
   },
   emits: ["success", "fail", "refresh"],
-  setup(e, { expose: o, emit: s }) {
-    const f = e, u = c(!1), m = c(!1), E = P(() => ({ width: `${f.width}px` })), y = c(), d = c(), H = A({
+  setup(e, { expose: n, emit: a }) {
+    const c = e, d = u(!1), _ = u(!1), H = N(() => ({ width: `${c.width}px` })), w = u(), v = u(), L = V({
       isOk: !1,
       isKeep: !1,
       clipBarx: 0
-    }), k = c(), v = c(), r = c(!1), C = c(), t = A({
+    }), M = u(), h = u(), i = u(!1), T = u(), t = V({
       left: 0,
       startX: 0,
       isMoving: !1,
       imgX: 0
-    }), L = P(() => ({ left: `${n(t.left)}px` })), O = (l) => {
-      r.value || (t.startX = l.x, t.isMoving = !0);
-    }, $ = (l) => {
+    }), O = N(() => ({ left: `${r(t.left)}px` })), P = (o) => {
+      const { type: s } = o, f = s === "mousedown" ? o.x : o.touches[0].clientX;
+      i.value || (t.startX = f, t.isMoving = !0);
+    }, A = (o) => {
       if (t.isMoving) {
-        const a = l.x - t.startX;
-        t.left = a, d.value.style.left = a + "px", v.value.style.width = 40 + a + "px";
+        const { type: s } = o, p = (s === "mousedown" ? o.x : o.touches[0].clientX) - t.startX;
+        t.left = p, v.value.style.left = p + "px", h.value.style.width = 40 + p + "px";
       }
-    }, T = (l) => {
-      if (l.type === "mouseup" && (Math.abs(t.imgX - t.left) < f.diffDistance ? (r.value = !0, s("success", { moveDistance: t.left, pointX: t.imgX })) : (f.autoRefresh && (u.value = !0), m.value = !0, s("fail", { moveDistance: t.left, pointX: t.imgX }))), l.type === "mouseup" && f.autoRefresh) {
+    }, R = (o) => {
+      const { type: s } = o;
+      if ((s === "mouseup" || s === "touchend") && (Math.abs(t.imgX - t.left) < c.diffDistance ? (i.value = !0, a("success", { moveDistance: t.left, pointX: t.imgX })) : (c.autoRefresh && (d.value = !0), _.value = !0, a("fail", { moveDistance: t.left, pointX: t.imgX }))), (s === "mouseup" || s === "touchend") && c.autoRefresh) {
         t.isMoving = !1;
         return;
       }
-      t.isMoving && !r.value && (n(v).style.transition = "width .5s", n(C).style.transition = "all .5s", n(d).style.transition = "left .5s", I()), t.isMoving = !1;
-    }, x = () => {
-      u.value = !0, s("refresh");
-    }, I = () => {
-      m.value = !1, r.value = !1, t.left = 0, t.startX = 0, n(d).style.left = 0, n(v) && (n(v).style.width = 0), setTimeout(() => {
-        n(C).style.transition = "", n(v).style.transition = "", n(d).style.transition = "";
+      t.isMoving && !i.value && (r(h).style.transition = "width .5s", r(T).style.transition = "all .5s", r(v).style.transition = "left .5s", X()), t.isMoving = !1;
+    }, $ = () => {
+      d.value = !0, a("refresh");
+    }, X = () => {
+      _.value = !1, i.value = !1, t.left = 0, t.startX = 0, r(v).style.left = 0, r(h) && (r(h).style.width = 0), setTimeout(() => {
+        r(T).style.transition = "", r(h).style.transition = "", r(v).style.transition = "";
       }, 500);
     };
-    o({ reset: I });
+    n({ reset: X });
     const F = () => {
-      I(), u.value = !1;
-      const l = 50, a = k.value.height, _ = k.value.width, D = Math.floor(Number(f.width) / 2), B = 25, K = 20, b = D + Math.floor(Math.random() * (D - l - B));
-      let p = B + Math.floor(
-        Math.random() * (a - l - B - K)
+      X(), d.value = !1;
+      const o = 50, s = M.value.height, f = M.value.width, p = Math.floor(Number(c.width) / 2), B = 25, K = 20, b = p + Math.floor(Math.random() * (p - o - B));
+      let g = B + Math.floor(
+        Math.random() * (s - o - B - K)
       );
-      y.value.setAttribute("width", _), y.value.setAttribute("height", a), y.value.style.display = "block";
-      const j = y.value.getContext("2d");
-      W(j, b, p, "fill"), H.clipBarx = b, t.imgX = b;
-      const g = d.value;
-      g.setAttribute("width", _), g.setAttribute("height", a), g.style.display = "block";
-      const X = l + 8 * 2 + 3, w = g.getContext("2d");
-      w.clearRect(0, 0, _, a), W(w, b, p, "clip"), w.drawImage(k.value, 0, 0, _, a), p = p - 8 * 2 - 1;
-      const q = w.getImageData(b, p, X, X);
-      g.setAttribute("width", X), g.setAttribute("height", a), w.putImageData(q, 0, p);
+      w.value.setAttribute("width", f), w.value.setAttribute("height", s), w.value.style.display = "block";
+      const j = w.value.getContext("2d");
+      E(j, b, g, "fill"), L.clipBarx = b, t.imgX = b;
+      const m = v.value;
+      m.setAttribute("width", f), m.setAttribute("height", s), m.style.display = "block";
+      const z = o + 8 * 2 + 3, k = m.getContext("2d");
+      k.clearRect(0, 0, f, s), E(k, b, g, "clip"), k.drawImage(M.value, 0, 0, f, s), g = g - 8 * 2 - 1;
+      const q = k.getImageData(b, g, z, z);
+      m.setAttribute("width", z), m.setAttribute("height", s), k.putImageData(q, 0, g);
     };
-    return (l, a) => (M(), R("div", {
-      class: N(["puzzle-verify", e.wrapper]),
-      style: V(E.value)
+    return (o, s) => (S(), C("div", {
+      class: x(["puzzle-verify", e.wrapper]),
+      style: W(H.value)
     }, [
-      u.value ? (M(), R("div", Z, [
+      d.value ? (S(), C("div", Z, [
         ee,
-        i("span", null, S(m.value ? "验证失败，请重试" : "加载中"), 1)
-      ])) : z("", !0),
-      i("div", te, [
-        e.showRefresh && !r.value ? (M(), R("span", {
+        l("span", null, I(_.value ? "验证失败，请重试" : "加载中"), 1)
+      ])) : D("", !0),
+      l("div", te, [
+        e.showRefresh && !i.value ? (S(), C("span", {
           key: 0,
           class: "iconfont refresh",
-          onClick: a[0] || (a[0] = (_) => x())
-        }, "")) : z("", !0),
-        i("img", {
+          onClick: s[0] || (s[0] = (f) => $())
+        }, "")) : D("", !0),
+        l("img", {
           src: e.imgSrc,
           ref_key: "imgRef",
-          ref: k,
+          ref: M,
           onLoad: F
         }, null, 40, se),
-        i("canvas", {
+        l("canvas", {
           ref_key: "mainCanvasRef",
-          ref: y,
+          ref: w,
           class: "main-canvas"
         }, null, 512),
-        i("canvas", {
+        l("canvas", {
           ref_key: "moveCanvasRef",
-          ref: d,
+          ref: v,
           class: "move-canvas"
         }, null, 512)
       ]),
-      i("div", {
+      l("div", {
         class: "drag-box",
-        onMousemove: $,
-        onMouseleave: T
+        onTouchmove: A,
+        onTouchcancel: R,
+        onMousemove: A,
+        onMouseleave: R
       }, [
-        i("div", ae, [
-          J(S(r.value ? "" : e.tip) + " ", 1),
-          r.value ? z("", !0) : (M(), R("div", oe))
+        l("div", ae, [
+          J(I(i.value ? "" : e.tip) + " ", 1),
+          i.value ? D("", !0) : (S(), C("div", oe))
         ]),
-        i("div", {
-          class: N(["progress-bar", { "progress-bar-passed": r.value, "progress-bar-fail": m.value }]),
+        l("div", {
+          class: x(["progress-bar", { "progress-bar-passed": i.value, "progress-bar-fail": _.value }]),
           ref_key: "progressBarRef",
-          ref: v
-        }, S(r.value ? e.successTip : ""), 3),
-        i("div", {
+          ref: h
+        }, I(i.value ? e.successTip : ""), 3),
+        l("div", {
           class: "drag-bar",
-          style: V(L.value),
+          style: W(O.value),
           ref_key: "dragBarRef",
-          ref: C,
-          onMousedown: O,
-          onMouseup: T
+          ref: T,
+          onTouchstart: P,
+          onTouchend: R,
+          onMousedown: P,
+          onMouseup: R
         }, [
-          i("span", le, S(r.value ? "" : ""), 1)
+          l("span", ne, I(i.value ? "" : ""), 1)
         ], 36)
       ], 32)
     ], 6));
   }
 });
-const ne = (e, o) => {
-  const s = e.__vccOpts || e;
-  for (const [f, u] of o)
-    s[f] = u;
-  return s;
-}, ce = /* @__PURE__ */ ne(re, [["__scopeId", "data-v-713f0316"]]);
+const re = (e, n) => {
+  const a = e.__vccOpts || e;
+  for (const [c, d] of n)
+    a[c] = d;
+  return a;
+}, fe = /* @__PURE__ */ re(ie, [["__scopeId", "data-v-f096419f"]]);
 export {
-  ce as default
+  fe as default
 };
