@@ -20,6 +20,8 @@
     </div>
     <div
       class="drag-box"
+      @touchmove="dragMove"
+      @touchcancel="dragEnd"
       @mousemove="dragMove"
       @mouseleave="dragEnd"
     >
@@ -38,6 +40,8 @@
         class="drag-bar"
         :style="dragBarStyle"
         ref="dragBarRef"
+        @touchstart="dragStart"
+        @touchend="dragEnd"
         @mousedown="dragStart"
         @mouseup="dragEnd"
       >
@@ -123,16 +127,20 @@ const dragBarInfo = reactive({
 const dragBarStyle = computed(() => ({ left: `${unref(dragBarInfo.left)}px` }));
 
 // 拖动事件开始
-const dragStart = (e: { x: number }) => {
+const dragStart = (e: { x?: any; touches?: any; type?: any; }) => {
+  const { type } = e;
+  const x = type === 'mousedown' ? e.x : e.touches[0].clientX;
   if (isPassed.value) return;
-  dragBarInfo.startX = e.x;
+  dragBarInfo.startX = x;
   dragBarInfo.isMoving = true;
 };
 
 // 拖动中
-const dragMove = (e: { x: number }) => {
+const dragMove = (e: { x?: any; touches?: any; type?: any; }) => {
   if (dragBarInfo.isMoving) {
-    const distance = e.x - dragBarInfo.startX;
+    const { type } = e;
+    const x = type === 'mousedown' ? e.x : e.touches[0].clientX;
+    const distance = x - dragBarInfo.startX;
     dragBarInfo.left = distance;
     moveCanvasRef.value.style.left = distance + "px"; // 更改canvas位置
     progressBarRef.value.style.width = 40 + distance + "px";
@@ -141,7 +149,8 @@ const dragMove = (e: { x: number }) => {
 
 // 拖动结束（超出拖动范围、松开鼠标）
 const dragEnd = (e: { type: string; }) => {
-  if (e.type === "mouseup") {
+  const { type } = e;
+  if (type === "mouseup" || type === "touchend") {
     const diff = Math.abs(dragBarInfo.imgX - dragBarInfo.left);
     if (diff < props.diffDistance) {
       isPassed.value = true;
@@ -152,7 +161,7 @@ const dragEnd = (e: { type: string; }) => {
       emmits('fail', { moveDistance: dragBarInfo.left, pointX: dragBarInfo.imgX })
     }
   }
-  if (e.type === "mouseup" && props.autoRefresh) {
+  if ((type === "mouseup" || type === "touchend") && props.autoRefresh) {
     dragBarInfo.isMoving = false;
     return
   }
