@@ -7,7 +7,7 @@ $ npm install puzzle-verify
 ## 引入插件和样式
 ```js
 import PuzzleVerify from 'puzzle-verify'
-import 'puzzle-verify/style.css'
+import 'puzzle-verify/lib/style.css'
 ```
 ## 使用
 ```vue
