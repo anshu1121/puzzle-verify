@@ -2,7 +2,7 @@
   <div class="app">
     <PuzzleVerify
       :width="360"
-      :imgSrc="imgSrc"
+      
       :autoRefresh="false"
       ref="puzzleRef"
       @success="onSuccess"
@@ -15,6 +15,7 @@
 
 <script setup lang="ts">
 // import PuzzleVerify from './PuzzleVerify'
+// import '../src/assets/iconfont.css'
 
 import PuzzleVerify from 'puzzle-verify';
 import 'puzzle-verify/lib/style.css';

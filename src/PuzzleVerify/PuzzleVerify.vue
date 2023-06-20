@@ -243,6 +243,19 @@ const onImgLoad = () => {
 </script>
 
 <style lang="scss" scoped>
+@font-face {
+  font-family: 'iconfont';  /* Project id 4109015 */
+  src: url('//at.alicdn.com/t/c/font_4109015_lcyuyo05dqi.woff2?t=1686191906638') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4109015_lcyuyo05dqi.woff?t=1686191906638') format('woff'),
+       url('//at.alicdn.com/t/c/font_4109015_lcyuyo05dqi.ttf?t=1686191906638') format('truetype');
+}
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 .puzzle-verify {
   position: relative;
   width: 360px;

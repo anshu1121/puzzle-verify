@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "puzzle-verify": "^1.1.1",
+    "puzzle-verify": "^1.1.2",
     "sass": "^1.62.1",
     "vue": "^3.2.47"
   },
