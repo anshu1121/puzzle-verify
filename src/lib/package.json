@@ -1,6 +1,6 @@
 {
   "name": "puzzle-verify",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "拼图验证",
   "private": false,
   "keywords": ["vue", "vue3", "puzzle", "verify"],
