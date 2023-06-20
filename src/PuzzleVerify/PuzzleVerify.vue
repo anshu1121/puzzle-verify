@@ -139,7 +139,7 @@ const dragStart = (e: { x?: any; touches?: any; type?: any; }) => {
 const dragMove = (e: { x?: any; touches?: any; type?: any; }) => {
   if (dragBarInfo.isMoving) {
     const { type } = e;
-    const x = type === 'mousedown' ? e.x : e.touches[0].clientX;
+    const x = type === 'mousemove' ? e.x : e.touches[0].clientX;
     const distance = x - dragBarInfo.startX;
     dragBarInfo.left = distance;
     moveCanvasRef.value.style.left = distance + "px"; // 更改canvas位置

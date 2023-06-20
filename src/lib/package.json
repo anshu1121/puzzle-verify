@@ -1,0 +1,16 @@
+{
+  "name": "puzzle-verify",
+  "version": "1.0.4",
+  "description": "拼图验证，pc，mobile",
+  "private": false,
+  "keywords": ["vue", "vue3", "puzzle", "verify"],
+  "main": "index.es.js",
+  "markdown": "github",
+  "readme": "github",
+  "repository": "https://github.com/anshu1121/puzzle-verify",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
