@@ -2,7 +2,7 @@
   <div class="app">
     <PuzzleVerify
       :width="360"
-      
+      :imgSrc="imgSrc"
       :autoRefresh="false"
       ref="puzzleRef"
       @success="onSuccess"
