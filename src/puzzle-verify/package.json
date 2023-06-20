@@ -1,6 +1,6 @@
 {
   "name": "puzzle-verify",
-  "version": "1.0.4",
+  "version": "1.1.1",
   "description": "拼图验证，pc，mobile",
   "private": false,
   "keywords": [
@@ -9,7 +9,7 @@
     "puzzle",
     "verify"
   ],
-  "main": "index.es.js",
+  "main": "./lib/index.es.js",
   "markdown": "github",
   "readme": "github",
   "repository": "https://github.com/anshu1121/puzzle-verify",

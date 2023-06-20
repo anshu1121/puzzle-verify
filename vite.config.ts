@@ -6,11 +6,11 @@ import path from 'path'
 export default defineConfig({
   plugins: [vue()],
   build: {
-    outDir: path.resolve(__dirname, "src/lib"),
+    outDir: path.resolve(__dirname, "src/puzzle-verify/lib"),
     lib: {
       entry: path.resolve(__dirname, "src/PuzzleVerify/index.ts"),
       name: "puzzle-verify",
-      fileName: (format) => `index.${format}.ts`,
+      fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
       // 确保外部化处理不想打包进库的依赖

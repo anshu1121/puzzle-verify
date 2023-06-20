@@ -14,9 +14,11 @@
 </template>
 
 <script setup lang="ts">
-import PuzzleVerify from './PuzzleVerify'
-// import PuzzleVerify from 'puzzle-verify'
-// import 'puzzle-verify/style.css'
+// import PuzzleVerify from './PuzzleVerify'
+
+import PuzzleVerify from 'puzzle-verify';
+import 'puzzle-verify/lib/style.css';
+
 import { ref } from 'vue'
 
 const puzzleRef = ref()

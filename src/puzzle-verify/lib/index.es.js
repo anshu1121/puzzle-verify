@@ -1,7 +1,7 @@
-import { defineComponent as G, ref as u, computed as N, reactive as V, unref as r, openBlock as S, createElementBlock as C, normalizeClass as x, normalizeStyle as W, createElementVNode as l, toDisplayString as I, createCommentVNode as D, createTextVNode as J, pushScopeId as Q, popScopeId as U } from "vue";
+import { defineComponent as G, ref as f, computed as N, reactive as V, unref as r, openBlock as S, createElementBlock as C, normalizeClass as x, normalizeStyle as W, createElementVNode as l, toDisplayString as I, createCommentVNode as D, createTextVNode as J, pushScopeId as Q, popScopeId as U } from "vue";
 const y = Math.PI, E = (e, n, a, c) => {
   e.beginPath(), e.moveTo(n, a), e.arc(n + 50 / 2, a - 8 + 2, 8, 0.72 * y, 2.26 * y), e.lineTo(n + 50, a), e.arc(n + 50 + 8 - 2, a + 50 / 2, 8, 1.21 * y, 2.78 * y), e.lineTo(n + 50, a + 50), e.lineTo(n, a + 50), e.arc(n + 8 - 2, a + 50 / 2, 8 + 0.4, 2.76 * y, 1.24 * y, !0), e.lineTo(n, a), e.lineWidth = 0, e.fillStyle = "rgba(255, 255, 255, .85)", e.strokeStyle = "rgba(255, 255, 255, .8)", e.stroke(), e[c](), e.globalCompositeOperation = "destination-over";
-}, Y = (e) => (Q("data-v-f096419f"), e = e(), U(), e), Z = {
+}, Y = (e) => (Q("data-v-ca601280"), e = e(), U(), e), Z = {
   key: 0,
   class: "iconfont mask"
 }, ee = /* @__PURE__ */ Y(() => /* @__PURE__ */ l("div", { class: "rotate" }, "", -1)), te = { class: "img-box" }, se = ["src"], ae = { class: "tip-text" }, oe = {
@@ -45,21 +45,21 @@ const y = Math.PI, E = (e, n, a, c) => {
   },
   emits: ["success", "fail", "refresh"],
   setup(e, { expose: n, emit: a }) {
-    const c = e, d = u(!1), _ = u(!1), H = N(() => ({ width: `${c.width}px` })), w = u(), v = u(), L = V({
+    const c = e, d = f(!1), _ = f(!1), H = N(() => ({ width: `${c.width}px` })), b = f(), v = f(), L = V({
       isOk: !1,
       isKeep: !1,
       clipBarx: 0
-    }), M = u(), h = u(), i = u(!1), T = u(), t = V({
+    }), M = f(), h = f(), i = f(!1), T = f(), t = V({
       left: 0,
       startX: 0,
       isMoving: !1,
       imgX: 0
     }), O = N(() => ({ left: `${r(t.left)}px` })), P = (o) => {
-      const { type: s } = o, f = s === "mousedown" ? o.x : o.touches[0].clientX;
-      i.value || (t.startX = f, t.isMoving = !0);
+      const { type: s } = o, u = s === "mousedown" ? o.x : o.touches[0].clientX;
+      i.value || (t.startX = u, t.isMoving = !0);
     }, A = (o) => {
       if (t.isMoving) {
-        const { type: s } = o, p = (s === "mousedown" ? o.x : o.touches[0].clientX) - t.startX;
+        const { type: s } = o, p = (s === "mousemove" ? o.x : o.touches[0].clientX) - t.startX;
         t.left = p, v.value.style.left = p + "px", h.value.style.width = 40 + p + "px";
       }
     }, R = (o) => {
@@ -79,18 +79,18 @@ const y = Math.PI, E = (e, n, a, c) => {
     n({ reset: X });
     const F = () => {
       X(), d.value = !1;
-      const o = 50, s = M.value.height, f = M.value.width, p = Math.floor(Number(c.width) / 2), B = 25, K = 20, b = p + Math.floor(Math.random() * (p - o - B));
+      const o = 50, s = M.value.height, u = M.value.width, p = Math.floor(Number(c.width) / 2), B = 25, K = 20, w = p + Math.floor(Math.random() * (p - o - B));
       let g = B + Math.floor(
         Math.random() * (s - o - B - K)
       );
-      w.value.setAttribute("width", f), w.value.setAttribute("height", s), w.value.style.display = "block";
-      const j = w.value.getContext("2d");
-      E(j, b, g, "fill"), L.clipBarx = b, t.imgX = b;
+      b.value.setAttribute("width", u), b.value.setAttribute("height", s), b.value.style.display = "block";
+      const j = b.value.getContext("2d");
+      E(j, w, g, "fill"), L.clipBarx = w, t.imgX = w;
       const m = v.value;
-      m.setAttribute("width", f), m.setAttribute("height", s), m.style.display = "block";
+      m.setAttribute("width", u), m.setAttribute("height", s), m.style.display = "block";
       const z = o + 8 * 2 + 3, k = m.getContext("2d");
-      k.clearRect(0, 0, f, s), E(k, b, g, "clip"), k.drawImage(M.value, 0, 0, f, s), g = g - 8 * 2 - 1;
-      const q = k.getImageData(b, g, z, z);
+      k.clearRect(0, 0, u, s), E(k, w, g, "clip"), k.drawImage(M.value, 0, 0, u, s), g = g - 8 * 2 - 1;
+      const q = k.getImageData(w, g, z, z);
       m.setAttribute("width", z), m.setAttribute("height", s), k.putImageData(q, 0, g);
     };
     return (o, s) => (S(), C("div", {
@@ -105,7 +105,7 @@ const y = Math.PI, E = (e, n, a, c) => {
         e.showRefresh && !i.value ? (S(), C("span", {
           key: 0,
           class: "iconfont refresh",
-          onClick: s[0] || (s[0] = (f) => $())
+          onClick: s[0] || (s[0] = (u) => $())
         }, "")) : D("", !0),
         l("img", {
           src: e.imgSrc,
@@ -115,7 +115,7 @@ const y = Math.PI, E = (e, n, a, c) => {
         }, null, 40, se),
         l("canvas", {
           ref_key: "mainCanvasRef",
-          ref: w,
+          ref: b,
           class: "main-canvas"
         }, null, 512),
         l("canvas", {
@@ -161,7 +161,7 @@ const re = (e, n) => {
   for (const [c, d] of n)
     a[c] = d;
   return a;
-}, fe = /* @__PURE__ */ re(ie, [["__scopeId", "data-v-f096419f"]]);
+}, ue = /* @__PURE__ */ re(ie, [["__scopeId", "data-v-ca601280"]]);
 export {
-  fe as default
+  ue as default
 };
