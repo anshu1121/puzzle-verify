@@ -4,16 +4,20 @@
 ```bash
 $ npm install puzzle-verify
 ```
-## 使用
+## 引入插件和样式
 ```js
 import PuzzleVerify from 'puzzle-verify'
 import 'puzzle-verify/style.css'
+```
+## 使用
+```vue
+<PuzzleVerify :imgSrc="imgSrc" />
 ```
 ## 参数
 ### props
 | 参数 | 说明 | 类型 | 默认值 |
 |----|---|---|---|
-| imgSrc | 图片链接 | string | - |
+| imgSrc | 图片链接,必填 | string | - |
 | wrapper | 容器类名 | string | - |
 | width | 宽度 | number | 360 |
 | tip | 提示文字 | string | '拖动滑块完成验证' |
